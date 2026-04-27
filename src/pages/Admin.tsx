@@ -57,7 +57,18 @@ const PRODUCT_CATEGORIES = [
   "Thread Ceremony",
   "Butterfly Theme",
   "Jungle Safari",
-  "Space Theme"
+  "Space Theme",
+  "Ganesha Puja",
+  "Satyanarayan Puja",
+  "Griha Pravesh",
+  "Laxmi Puja",
+  "Saraswati Puja",
+  "Diwali",
+  "Holi",
+  "Raksha Bandhan",
+  "Navratri",
+  "Durga Puja",
+  "Ganesh Chaturthi"
 ];
 
 export default function AdminDashboard() {
