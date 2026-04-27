@@ -47,7 +47,17 @@ const PRODUCT_CATEGORIES = [
   "Hindu Wedding",
   "Christian Wedding",
   "Muslim Wedding",
-  "Sikh Wedding"
+  "Sikh Wedding",
+  "Annaprashan",
+  "Baby Shower",
+  "Birthday Party",
+  "Birth Announcement",
+  "Arangetram",
+  "Mundan Ceremony",
+  "Thread Ceremony",
+  "Butterfly Theme",
+  "Jungle Safari",
+  "Space Theme"
 ];
 
 export default function AdminDashboard() {
