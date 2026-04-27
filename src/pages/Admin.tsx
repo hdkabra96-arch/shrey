@@ -64,6 +64,9 @@ export default function AdminDashboard() {
   const { products, addProduct, updateProduct, deleteProduct, navItems, updateNavItems, bannerSlides, updateBannerSlides, brandMessage, updateBrandMessage } = useStore();
   const [isProductDialogOpen, setIsProductDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loginForm, setLoginForm] = useState({ id: '', password: '' });
 
   const [formData, setFormData] = useState({
     name: '',
@@ -75,6 +78,54 @@ export default function AdminDashboard() {
     videoUrl: '',
     description: '',
   });
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (loginForm.id === 'admin' && loginForm.password === 'admin@123') {
+      setIsAuthenticated(true);
+      toast.success('Logged in successfully');
+    } else {
+      toast.error('Invalid ID or password');
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="container mx-auto px-4 py-16 max-w-md mt-20 min-h-[60vh]">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl text-center">Admin Login</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="id">Admin ID</Label>
+                <Input
+                  id="id"
+                  value={loginForm.id}
+                  onChange={(e) => setLoginForm({ ...loginForm, id: e.target.value })}
+                  placeholder="Enter ID"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={loginForm.password}
+                  onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+                  placeholder="Enter password"
+                  required
+                />
+              </div>
+              <Button type="submit" className="w-full">Login</Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   const handleProductSubmit = (e: React.FormEvent) => {
     e.preventDefault();

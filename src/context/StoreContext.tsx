@@ -140,17 +140,7 @@ const INITIAL_NAV: NavItem[] = [
         { name: 'Conference', icon: 'Users' },
       ]
     }
-  },
-  { 
-    name: 'ECARD MAKER', 
-    mega: {
-      'POPULAR': [
-        { name: 'Wedding Ecards', icon: 'Heart' },
-        { name: 'Birthday Ecards', icon: 'PartyPopper' },
-        { name: 'Festival Ecards', icon: 'Sparkles' },
-      ]
-    }
-  },
+  }
 ];
 
 const INITIAL_BANNER_SLIDES: BannerSlide[] = [
@@ -177,7 +167,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [navItems, setNavItems] = useState<NavItem[]>(() => {
     const saved = localStorage.getItem('navItems');
-    return saved ? JSON.parse(saved) : INITIAL_NAV;
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      const filtered = parsed.filter((item: NavItem) => item.name !== 'ECARD MAKER');
+      return filtered;
+    }
+    return INITIAL_NAV;
   });
 
   const [bannerSlides, setBannerSlides] = useState<BannerSlide[]>(() => {
