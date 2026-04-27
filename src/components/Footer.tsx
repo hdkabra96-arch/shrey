@@ -40,7 +40,6 @@ export const Footer = () => {
             <ul className="flex flex-col gap-3 text-muted-foreground">
               <li><a href="#" className="hover:text-primary">About Us</a></li>
               <li><a href="#" className="hover:text-primary">All Templates</a></li>
-              <li><a href="#" className="hover:text-primary">How it Works</a></li>
               <li><a href="#" className="hover:text-primary">Pricing</a></li>
               <li><a href="#" className="hover:text-primary">Contact Us</a></li>
             </ul>

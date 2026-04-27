@@ -1,5 +1,15 @@
 import { LucideIcon } from 'lucide-react';
 
+export interface BrandMessage {
+  heading: string;
+  subHeading: string;
+}
+
+export interface BannerSlide {
+  title: string;
+  url: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -7,6 +17,7 @@ export interface Product {
   category: string;
   type: 'VIDEO' | 'GIF' | 'ECARD' | 'MULTIPLE';
   image: string;
+  images?: string[];
   videoUrl?: string;
   description: string;
   isFeatured?: boolean;

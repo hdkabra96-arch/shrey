@@ -5,6 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
+import { BrandMessageSection } from './components/BrandMessageSection';
 import { Hero } from './components/Hero';
 import { Trending } from './components/Trending';
 import { HowItWorks } from './components/HowItWorks';
@@ -12,10 +13,13 @@ import { FeaturedInvites } from './components/FeaturedInvites';
 import { FAQ } from './components/FAQ';
 import { Testimonials } from './components/Testimonials';
 import { Footer } from './components/Footer';
+import { WhatsAppButton } from './components/WhatsAppButton';
 import { StoreProvider } from './context/StoreContext';
 import { Toaster } from '@/components/ui/sonner';
 import Shop from './pages/Shop';
 import AdminDashboard from './pages/Admin';
+
+import CategoryGallery from './pages/CategoryGallery';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
@@ -50,6 +54,11 @@ export default function App() {
   }, []);
 
   const renderContent = () => {
+    if (path.startsWith('/category/')) {
+      const categoryName = path.replace('/category/', '');
+      return <CategoryGallery categoryName={categoryName} />;
+    }
+
     switch (path) {
       case '/shop':
         return <Shop />;
@@ -58,6 +67,7 @@ export default function App() {
       default:
         return (
           <>
+            <BrandMessageSection />
             <Hero />
             <Trending />
             <HowItWorks />
@@ -78,6 +88,7 @@ export default function App() {
         </main>
         <Footer />
         <Toaster position="top-center" />
+        <WhatsAppButton />
       </div>
     </StoreProvider>
   );

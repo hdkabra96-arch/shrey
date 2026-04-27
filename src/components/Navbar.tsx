@@ -10,7 +10,7 @@ import {
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
 import * as Icons from 'lucide-react';
-import { Menu, Search, ShoppingCart, User, ChevronDown, LayoutDashboard, ShoppingBag } from 'lucide-react';
+import { Menu, Search, ShoppingCart, User, ChevronDown, LayoutDashboard, ShoppingBag, Facebook, Instagram, Youtube, Twitter, Phone } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useStore } from '../context/StoreContext';
 
@@ -23,8 +23,26 @@ export const Navbar = () => {
   const { navItems } = useStore();
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-20 items-center justify-between px-4">
+    <div className="flex flex-col w-full">
+      {/* Top Bar */}
+      <div className="bg-[#EAB308] text-white py-2 px-4">
+        <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center text-[11px] font-bold tracking-wider">
+          <div className="flex items-center gap-4 mb-2 sm:mb-0">
+            <span className="flex items-center gap-1">
+              <Phone className="h-3 w-3" /> Whatsapp on +91 887979 4909 | Mon. - Fri. (10 am - 7 pm IST)
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            <a href="#" className="hover:opacity-80 transition-opacity"><Facebook className="h-3.5 w-3.5" /></a>
+            <a href="#" className="hover:opacity-80 transition-opacity"><Instagram className="h-3.5 w-3.5" /></a>
+            <a href="#" className="hover:opacity-80 transition-opacity"><Youtube className="h-3.5 w-3.5" /></a>
+            <a href="#" className="hover:opacity-80 transition-opacity"><Twitter className="h-3.5 w-3.5" /></a>
+          </div>
+        </div>
+      </div>
+
+      <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto flex h-20 items-center justify-between px-4">
         <div className="flex items-center gap-8">
           <Sheet>
             <SheetTrigger render={<Button variant="ghost" size="icon" className="lg:hidden" />}>
@@ -39,9 +57,6 @@ export const Navbar = () => {
                   className="h-16 w-auto object-contain mb-4"
                   referrerPolicy="no-referrer"
                 />
-                <a href="/shop" className="flex items-center gap-2 text-lg font-bold text-primary uppercase">
-                  <ShoppingBag className="h-5 w-5" /> Shop All
-                </a>
                 <a href="/admin" className="flex items-center gap-2 text-lg font-bold text-muted-foreground uppercase">
                   <LayoutDashboard className="h-5 w-5" /> Admin
                 </a>
@@ -60,7 +75,7 @@ export const Navbar = () => {
                           <div key={key} className="mb-2">
                             <p className="text-xs font-bold text-muted-foreground uppercase mb-1">{key}</p>
                             {list.map((sub) => (
-                              <a key={sub.name} href="#" className="block py-1 text-sm hover:text-primary">
+                              <a key={sub.name} href={`/category/${encodeURIComponent(sub.name.replace(/ /g, '-'))}`} className="block py-1 text-sm hover:text-primary">
                                 {sub.name}
                               </a>
                             ))}
@@ -86,22 +101,12 @@ export const Navbar = () => {
 
         <div className="hidden lg:flex lg:items-center lg:gap-2">
           <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/shop"
-                  className={cn(
-                    "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-xs font-bold tracking-wider uppercase transition-colors text-primary hover:text-primary/80"
-                  )}
-                >
-                  SHOP ALL
-                </NavigationMenuLink>
-              </NavigationMenuItem>
+            <NavigationMenuList className="gap-1">
               {navItems.map((item) => (
                 <NavigationMenuItem key={item.name}>
                   {item.mega ? (
                     <>
-                      <NavigationMenuTrigger className="bg-transparent font-bold text-xs tracking-wider uppercase hover:text-primary data-[state=open]:text-primary">
+                      <NavigationMenuTrigger className="bg-transparent font-bold text-[11px] tracking-[0.1em] uppercase hover:text-primary data-[state=open]:text-primary px-3">
                         {item.name}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
@@ -117,7 +122,7 @@ export const Navbar = () => {
                                     <NavigationMenuLink
                                       render={
                                         <a
-                                          href="#"
+                                          href={`/category/${encodeURIComponent(link.name.replace(/ /g, '-'))}`}
                                           className="group flex items-center gap-2 text-[13px] font-medium transition-colors hover:text-primary"
                                         />
                                       }
@@ -137,7 +142,7 @@ export const Navbar = () => {
                     <NavigationMenuLink
                       href={item.href}
                       className={cn(
-                        "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-xs font-bold tracking-wider uppercase transition-colors hover:text-primary focus:text-primary focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                        "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-3 py-2 text-[11px] font-bold tracking-[0.1em] uppercase transition-colors hover:text-primary focus:text-primary focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                       )}
                     >
                       {item.name}
@@ -146,10 +151,34 @@ export const Navbar = () => {
                 </NavigationMenuItem>
               ))}
               <NavigationMenuItem>
+                <NavigationMenuTrigger className="bg-transparent font-bold text-[11px] tracking-[0.1em] hover:text-primary px-3">
+                  Account
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[200px] gap-3 p-4">
+                    <li>
+                      <NavigationMenuLink href="#" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                        <div className="text-sm font-medium leading-none">My Profile</div>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink href="#" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                        <div className="text-sm font-medium leading-none">My Orders</div>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink href="#" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                        <div className="text-sm font-medium leading-none">Logout</div>
+                      </NavigationMenuLink>
+                    </li>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
                 <NavigationMenuLink
                   href="/admin"
                   className={cn(
-                    "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-xs font-bold tracking-wider uppercase transition-colors text-muted-foreground hover:text-primary"
+                    "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-3 py-2 text-[11px] font-bold tracking-[0.1em] uppercase transition-colors text-muted-foreground hover:text-primary"
                   )}
                 >
                   ADMIN
@@ -172,5 +201,6 @@ export const Navbar = () => {
         </div>
       </div>
     </nav>
+    </div>
   );
 };

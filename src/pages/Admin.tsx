@@ -31,17 +31,37 @@ import { Plus, Pencil, Trash2, LayoutDashboard, ShoppingBag, Menu as MenuIcon, V
 import { toast } from 'sonner';
 import { Product } from '../types';
 
+const PRODUCT_CATEGORIES = [
+  "Engagement",
+  "Traditional Indian",
+  "Floral",
+  "Photo Based",
+  "Modern",
+  "Destination",
+  "Caricature",
+  "Save The Date",
+  "PDF Invitation",
+  "Video Invitation",
+  "GIF Invitation",
+  "Ecard Invitation",
+  "Hindu Wedding",
+  "Christian Wedding",
+  "Muslim Wedding",
+  "Sikh Wedding"
+];
+
 export default function AdminDashboard() {
-  const { products, addProduct, updateProduct, deleteProduct, navItems, updateNavItems } = useStore();
+  const { products, addProduct, updateProduct, deleteProduct, navItems, updateNavItems, bannerSlides, updateBannerSlides, brandMessage, updateBrandMessage } = useStore();
   const [isProductDialogOpen, setIsProductDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   const [formData, setFormData] = useState({
     name: '',
     price: '',
-    category: 'Wedding',
+    category: PRODUCT_CATEGORIES[0],
     type: 'VIDEO',
     image: '',
+    images: [] as string[],
     videoUrl: '',
     description: '',
   });
@@ -63,7 +83,7 @@ export default function AdminDashboard() {
     }
     setIsProductDialogOpen(false);
     setEditingProduct(null);
-    setFormData({ name: '', price: '', category: 'Wedding', type: 'VIDEO', image: '', videoUrl: '', description: '' });
+    setFormData({ name: '', price: '', category: PRODUCT_CATEGORIES[0], type: 'VIDEO', image: '', images: [], videoUrl: '', description: '' });
   };
 
   const openEditDialog = (product: Product) => {
@@ -74,6 +94,7 @@ export default function AdminDashboard() {
       category: product.category,
       type: product.type,
       image: product.image,
+      images: product.images || [],
       videoUrl: product.videoUrl || '',
       description: product.description,
     });
@@ -90,12 +111,18 @@ export default function AdminDashboard() {
       </div>
 
       <Tabs defaultValue="products" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 lg:w-[400px]">
+                <TabsList className="grid w-full grid-cols-4 lg:w-[800px]">
           <TabsTrigger value="products" className="flex items-center gap-2">
             <ShoppingBag className="h-4 w-4" /> Products
           </TabsTrigger>
           <TabsTrigger value="menu" className="flex items-center gap-2">
             <MenuIcon className="h-4 w-4" /> Navigation
+          </TabsTrigger>
+          <TabsTrigger value="hero" className="flex items-center gap-2">
+            <ImageIcon className="h-4 w-4" /> Banner Images
+          </TabsTrigger>
+          <TabsTrigger value="brand" className="flex items-center gap-2">
+            <LayoutDashboard className="h-4 w-4" /> Brand Profile
           </TabsTrigger>
         </TabsList>
 
@@ -104,13 +131,14 @@ export default function AdminDashboard() {
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Manage Products</CardTitle>
               <Dialog open={isProductDialogOpen} onOpenChange={setIsProductDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button onClick={() => {
+                <DialogTrigger 
+                  render={<Button />}
+                  onClick={() => {
                     setEditingProduct(null);
-                    setFormData({ name: '', price: '', category: 'Wedding', type: 'VIDEO', image: '', videoUrl: '', description: '' });
-                  }}>
-                    <Plus className="h-4 w-4 mr-2" /> Add Product
-                  </Button>
+                    setFormData({ name: '', price: '', category: PRODUCT_CATEGORIES[0], type: 'VIDEO', image: '', images: [], videoUrl: '', description: '' });
+                  }}
+                >
+                  <Plus className="h-4 w-4 mr-2" /> Add Product
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[500px]">
                   <DialogHeader>
@@ -154,22 +182,89 @@ export default function AdminDashboard() {
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="category">Category</Label>
-                      <Input 
-                        id="category" 
-                        value={formData.category} 
-                        onChange={(e) => setFormData({...formData, category: e.target.value})} 
-                        required 
-                      />
+                      <Select value={formData.category} onValueChange={(v) => setFormData({...formData, category: v})}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {PRODUCT_CATEGORIES.map(cat => (
+                            <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div className="grid gap-2">
-                      <Label htmlFor="image">Image URL</Label>
+                      <Label htmlFor="image">Primary Image URL (or upload)</Label>
+                      <div className="flex gap-2">
+                        <Input 
+                          id="image" 
+                          value={formData.image} 
+                          onChange={(e) => setFormData({...formData, image: e.target.value})} 
+                          placeholder="https://..." 
+                          required 
+                          className="flex-1"
+                        />
+                        <Input 
+                          type="file" 
+                          accept="image/*"
+                          className="w-[150px]"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onloadend = () => {
+                                setFormData({...formData, image: reader.result as string});
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }} 
+                        />
+                      </div>
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="images">Additional Images (Upload Multiple)</Label>
                       <Input 
-                        id="image" 
-                        value={formData.image} 
-                        onChange={(e) => setFormData({...formData, image: e.target.value})} 
-                        placeholder="https://..." 
-                        required 
+                        id="images" 
+                        type="file" 
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => {
+                          const files = Array.from(e.target.files || []);
+                          const promises = files.map(file => {
+                            return new Promise<string>((resolve) => {
+                              const reader = new FileReader();
+                              reader.onloadend = () => resolve(reader.result as string);
+                              reader.readAsDataURL(file);
+                            });
+                          });
+                          Promise.all(promises).then(base64Images => {
+                            setFormData(prev => ({
+                              ...prev,
+                              images: [...prev.images, ...base64Images]
+                            }));
+                          });
+                        }} 
                       />
+                      {formData.images.length > 0 && (
+                        <div className="flex gap-2 flex-wrap mt-2">
+                          {formData.images.map((img, i) => (
+                            <div key={i} className="relative group">
+                              <img src={img} alt="" className="w-16 h-16 object-cover rounded shadow-sm" />
+                              <button 
+                                type="button"
+                                className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                                onClick={() => {
+                                  const newImages = [...formData.images];
+                                  newImages.splice(i, 1);
+                                  setFormData({...formData, images: newImages});
+                                }}
+                              >
+                                &times;
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="video">Video URL (Optional)</Label>
@@ -245,8 +340,20 @@ export default function AdminDashboard() {
 
         <TabsContent value="menu">
           <Card>
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Navigation Menu Settings</CardTitle>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  if (confirm('Are you sure you want to reset the menu to defaults? This will overwrite your current menu structure.')) {
+                    localStorage.removeItem('navItems');
+                    window.location.reload();
+                  }
+                }}
+              >
+                Reset to Defaults
+              </Button>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
@@ -267,6 +374,113 @@ export default function AdminDashboard() {
                 <Button variant="outline" className="w-full border-2 border-dashed">
                   <Plus className="h-4 w-4 mr-2" /> Add Main Menu Item
                 </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="hero">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Manage Banner Images</CardTitle>
+              <Button onClick={() => {
+                const newSlides = [...bannerSlides, { title: 'New Ecard', url: 'https://picsum.photos/seed/new/450/800' }];
+                updateBannerSlides(newSlides);
+                toast.success('New banner slide added');
+              }}>
+                <Plus className="h-4 w-4 mr-2" /> Add Slide
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {bannerSlides.map((slide, idx) => (
+                  <div key={idx} className="flex items-center gap-4 p-4 border rounded-lg bg-muted/30">
+                    <img src={slide.url} alt={slide.title} className="h-20 w-12 object-cover rounded shadow-sm" />
+                    <div className="flex-1 space-y-2">
+                      <div className="grid gap-2">
+                        <Label>Title</Label>
+                        <Input 
+                          value={slide.title} 
+                          onChange={(e) => {
+                            const newSlides = [...bannerSlides];
+                            newSlides[idx].title = e.target.value;
+                            updateBannerSlides(newSlides);
+                          }} 
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <Label>Image (Upload or enter URL)</Label>
+                        <div className="flex gap-2">
+                          <Input 
+                            value={slide.url} 
+                            placeholder="Image URL"
+                            onChange={(e) => {
+                              const newSlides = [...bannerSlides];
+                              newSlides[idx].url = e.target.value;
+                              updateBannerSlides(newSlides);
+                            }} 
+                            className="flex-1"
+                          />
+                          <Input 
+                            type="file" 
+                            accept="image/*"
+                            className="w-[200px]"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                const reader = new FileReader();
+                                reader.onloadend = () => {
+                                  const newSlides = [...bannerSlides];
+                                  newSlides[idx].url = reader.result as string;
+                                  updateBannerSlides(newSlides);
+                                };
+                                reader.readAsDataURL(file);
+                              }
+                            }} 
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="text-destructive mt-6 self-start" 
+                      onClick={() => {
+                        const newSlides = bannerSlides.filter((_, i) => i !== idx);
+                        updateBannerSlides(newSlides);
+                        toast.success('Slide removed');
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="brand">
+          <Card>
+            <CardHeader>
+              <CardTitle>Manage Brand Message</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="grid gap-2">
+                  <Label>Heading</Label>
+                  <textarea 
+                    className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                    value={brandMessage.heading} 
+                    onChange={(e) => updateBrandMessage({ ...brandMessage, heading: e.target.value })} 
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Sub Heading (Description)</Label>
+                  <textarea 
+                    className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                    value={brandMessage.subHeading} 
+                    onChange={(e) => updateBrandMessage({ ...brandMessage, subHeading: e.target.value })} 
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>

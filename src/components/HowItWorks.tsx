@@ -14,11 +14,6 @@ const steps = [
     description: 'Send us the product code via WhatsApp or our contact form.',
   },
   {
-    icon: CreditCard,
-    title: 'Make the payment',
-    description: 'Complete the payment securely through our various payment options.',
-  },
-  {
     icon: Send,
     title: 'We customize the invitation',
     description: 'Our designers will customize the template with your details and send it to you.',
@@ -34,7 +29,7 @@ export const HowItWorks = () => {
           <div className="mx-auto mt-4 h-1 w-20 bg-primary" />
         </div>
 
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-3 max-w-5xl mx-auto">
           {steps.map((step, index) => (
             <motion.div
               key={step.title}
@@ -44,14 +39,14 @@ export const HowItWorks = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="relative flex flex-col items-center text-center"
             >
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <div className="mb-6 flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                 <step.icon className="h-8 w-8" />
               </div>
               <h3 className="mb-3 text-xl font-bold">{step.title}</h3>
               <p className="text-muted-foreground">{step.description}</p>
               
               {index < steps.length - 1 && (
-                <div className="absolute right-[-15%] top-8 hidden w-full border-t-2 border-dashed border-muted lg:block" />
+                <div className="absolute left-[calc(50%+2.5rem)] top-8 hidden w-[calc(100%-2rem)] border-t border-dashed border-muted-foreground/40 md:block" />
               )}
             </motion.div>
           ))}
