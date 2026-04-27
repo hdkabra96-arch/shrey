@@ -151,30 +151,6 @@ export const Navbar = () => {
                 </NavigationMenuItem>
               ))}
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-transparent font-bold text-[11px] tracking-[0.1em] hover:text-primary px-3">
-                  Account
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[200px] gap-3 p-4">
-                    <li>
-                      <NavigationMenuLink href="#" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                        <div className="text-sm font-medium leading-none">My Profile</div>
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink href="#" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                        <div className="text-sm font-medium leading-none">My Orders</div>
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink href="#" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                        <div className="text-sm font-medium leading-none">Logout</div>
-                      </NavigationMenuLink>
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
                 <NavigationMenuLink
                   href="/admin"
                   className={cn(

@@ -77,6 +77,7 @@ export default function AdminDashboard() {
     images: [] as string[],
     videoUrl: '',
     description: '',
+    isFeatured: false,
   });
 
   const handleLogin = (e: React.FormEvent) => {
@@ -144,7 +145,7 @@ export default function AdminDashboard() {
     }
     setIsProductDialogOpen(false);
     setEditingProduct(null);
-    setFormData({ name: '', price: '', category: PRODUCT_CATEGORIES[0], type: 'VIDEO', image: '', images: [], videoUrl: '', description: '' });
+    setFormData({ name: '', price: '', category: PRODUCT_CATEGORIES[0], type: 'VIDEO', image: '', images: [], videoUrl: '', description: '', isFeatured: false });
   };
 
   const openEditDialog = (product: Product) => {
@@ -158,6 +159,7 @@ export default function AdminDashboard() {
       images: product.images || [],
       videoUrl: product.videoUrl || '',
       description: product.description,
+      isFeatured: product.isFeatured || false,
     });
     setIsProductDialogOpen(true);
   };
@@ -196,7 +198,7 @@ export default function AdminDashboard() {
                   render={<Button />}
                   onClick={() => {
                     setEditingProduct(null);
-                    setFormData({ name: '', price: '', category: PRODUCT_CATEGORIES[0], type: 'VIDEO', image: '', images: [], videoUrl: '', description: '' });
+                    setFormData({ name: '', price: '', category: PRODUCT_CATEGORIES[0], type: 'VIDEO', image: '', images: [], videoUrl: '', description: '', isFeatured: false });
                   }}
                 >
                   <Plus className="h-4 w-4 mr-2" /> Add Product
@@ -344,6 +346,16 @@ export default function AdminDashboard() {
                         onChange={(e) => setFormData({...formData, description: e.target.value})} 
                         required 
                       />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input 
+                        type="checkbox"
+                        id="isFeatured"
+                        className="h-4 w-4 rounded border-gray-300"
+                        checked={formData.isFeatured}
+                        onChange={(e) => setFormData({...formData, isFeatured: e.target.checked})}
+                      />
+                      <Label htmlFor="isFeatured">Featured ("Our Most Loved")</Label>
                     </div>
                     <Button type="submit" className="w-full">
                       {editingProduct ? 'Update Product' : 'Save Product'}

@@ -10,7 +10,6 @@ import { Hero } from './components/Hero';
 import { Trending } from './components/Trending';
 import { HowItWorks } from './components/HowItWorks';
 import { FeaturedInvites } from './components/FeaturedInvites';
-import { FAQ } from './components/FAQ';
 import { Testimonials } from './components/Testimonials';
 import { Footer } from './components/Footer';
 import { WhatsAppButton } from './components/WhatsAppButton';
@@ -72,7 +71,6 @@ export default function App() {
             <Trending />
             <HowItWorks />
             <FeaturedInvites />
-            <FAQ />
             <Testimonials />
           </>
         );

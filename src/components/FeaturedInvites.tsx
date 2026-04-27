@@ -49,12 +49,23 @@ export const FeaturedInvites = () => {
               <Card className="overflow-hidden border-none shadow-lg">
                 <CardContent className="p-0">
                   <div className="relative aspect-video overflow-hidden">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                      referrerPolicy="no-referrer"
-                    />
+                    {product.videoUrl ? (
+                      <video
+                        src={product.videoUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                      />
+                    ) : (
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                        referrerPolicy="no-referrer"
+                      />
+                    )}
                     <div className="absolute top-4 left-4">
                       <div className="rounded bg-primary px-2 py-1 text-xs font-bold text-primary-foreground">
                         {product.type}

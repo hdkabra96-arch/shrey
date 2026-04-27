@@ -25,7 +25,7 @@ const INITIAL_PRODUCTS: Product[] = [
     category: 'Wedding',
     type: 'VIDEO',
     image: 'https://picsum.photos/seed/wedding1/800/600',
-    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    videoUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     description: 'A grand royal wedding invitation with traditional motifs.',
     isFeatured: true,
   },
@@ -45,6 +45,7 @@ const INITIAL_PRODUCTS: Product[] = [
     category: 'Baby & Kids',
     type: 'VIDEO',
     image: 'https://picsum.photos/seed/kids1/800/600',
+    videoUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
     description: 'Fun jungle safari themed video for kids birthdays.',
     isFeatured: true,
   }
